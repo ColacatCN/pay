@@ -1,9 +1,13 @@
 package com.zte.sdn.oscp.trains.pay.service.impl;
 
 import com.lly835.bestpay.enums.BestPayTypeEnum;
+import com.lly835.bestpay.enums.OrderStatusEnum;
 import com.lly835.bestpay.model.PayRequest;
 import com.lly835.bestpay.model.PayResponse;
 import com.lly835.bestpay.service.BestPayService;
+import com.zte.sdn.oscp.trains.pay.dao.PayInfoMapper;
+import com.zte.sdn.oscp.trains.pay.enums.PayPlatformEnum;
+import com.zte.sdn.oscp.trains.pay.pojo.PayInfo;
 import com.zte.sdn.oscp.trains.pay.service.IPayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +21,18 @@ public class PayService implements IPayService {
 
     @Autowired
     private BestPayService bestPayService;
+    @Autowired
+    private PayInfoMapper payInfoMapper;
 
     @Override
-    public PayResponse create(String orderId, BigDecimal amount) {
+    public PayResponse create(String orderId, BigDecimal amount, BestPayTypeEnum bestPayTypeEnum) {
+        PayInfo payInfo = new PayInfo(Long.parseLong(orderId),
+                PayPlatformEnum.getByBestPayTypeEnum(bestPayTypeEnum).getCode(),
+                OrderStatusEnum.NOTPAY.name(),
+                amount
+        );
+        payInfoMapper.insertSelective(payInfo);
+
         PayRequest payRequest = new PayRequest();
         payRequest.setOrderName("A");
         payRequest.setOrderId(orderId);

@@ -1,5 +1,6 @@
 package com.zte.sdn.oscp.trains.pay.controller;
 
+import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
 import com.zte.sdn.oscp.trains.pay.service.impl.PayService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +28,9 @@ public class PayController {
 
     @GetMapping("/create")
     public ModelAndView create(@RequestParam("orderId") String orderId,
-                               @RequestParam("amount") BigDecimal amount) {
-        PayResponse response = payService.create(orderId, amount);
+                               @RequestParam("amount") BigDecimal amount,
+                               @RequestParam("payType") BestPayTypeEnum bestPayTypeEnum) {
+        PayResponse response = payService.create(orderId, amount, bestPayTypeEnum);
         Map map = new HashMap();
         map.put("codeUrl", response.getCodeUrl());
         return new ModelAndView("create", map);
