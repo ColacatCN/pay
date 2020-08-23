@@ -2,6 +2,8 @@ package com.zte.sdn.oscp.trains.pay.controller;
 
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
+import com.zte.sdn.oscp.trains.pay.config.WxAccountConfig;
+import com.zte.sdn.oscp.trains.pay.pojo.PayInfo;
 import com.zte.sdn.oscp.trains.pay.service.impl.PayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class PayController {
     @Autowired
     private PayService payService;
 
+    @Autowired
+    private WxAccountConfig wxAccountConfig;
+
     @GetMapping("/create")
     public ModelAndView create(@RequestParam("orderId") String orderId,
                                @RequestParam("amount") BigDecimal amount,
@@ -33,12 +38,20 @@ public class PayController {
         PayResponse response = payService.create(orderId, amount, bestPayTypeEnum);
         Map map = new HashMap();
         map.put("codeUrl", response.getCodeUrl());
-        return new ModelAndView("create", map);
+        map.put("orderId", orderId);
+        map.put("returnUrl", wxAccountConfig.getReturnUrl());
+        return new ModelAndView("createForWxNative", map);
     }
 
     @PostMapping("/notify")
     @ResponseBody
-    public void asyncNotify(@RequestBody String notifyData) {
-        payService.asyncNotify(notifyData);
+    public String asyncNotify(@RequestBody String notifyData) {
+        return payService.asyncNotify(notifyData);
+    }
+
+    @GetMapping("/queryByOrderId")
+    @ResponseBody
+    public PayInfo queryByOrderId(@RequestParam("orderId") String orderId) {
+        return payService.queryByOrderId(orderId);
     }
 }

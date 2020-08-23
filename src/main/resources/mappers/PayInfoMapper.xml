@@ -12,20 +12,24 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
+
     <sql id="Base_Column_List">
     id, user_id, order_no, pay_platform, platform_number, platform_status, pay_amount, 
     create_time, update_time
   </sql>
+
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from mall_pay_info
         where id = #{id,jdbcType=INTEGER}
     </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from mall_pay_info
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
     <insert id="insert" parameterType="com.zte.sdn.oscp.trains.pay.pojo.PayInfo">
     insert into mall_pay_info (id, user_id, order_no, 
       pay_platform, platform_number, platform_status, 
@@ -36,6 +40,7 @@
       #{payAmount,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
+
     <insert id="insertSelective" parameterType="com.zte.sdn.oscp.trains.pay.pojo.PayInfo">
         insert into mall_pay_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -97,6 +102,7 @@
             </if>
         </trim>
     </insert>
+
     <update id="updateByPrimaryKeySelective" parameterType="com.zte.sdn.oscp.trains.pay.pojo.PayInfo">
         update mall_pay_info
         <set>
@@ -121,12 +127,10 @@
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime,jdbcType=TIMESTAMP},
-            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+
     <update id="updateByPrimaryKey" parameterType="com.zte.sdn.oscp.trains.pay.pojo.PayInfo">
     update mall_pay_info
     set user_id = #{userId,jdbcType=INTEGER},
@@ -139,4 +143,11 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="selectByOrderNo" parameterType="java.lang.Long" resultType="com.zte.sdn.oscp.trains.pay.pojo.PayInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from mall_pay_info
+        where order_no = #{orderNo,jdbcType=BIGINT}
+    </select>
 </mapper>
