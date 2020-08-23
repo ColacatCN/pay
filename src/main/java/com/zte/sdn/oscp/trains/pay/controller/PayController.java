@@ -4,7 +4,7 @@ import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
 import com.zte.sdn.oscp.trains.pay.config.WxAccountConfig;
 import com.zte.sdn.oscp.trains.pay.pojo.PayInfo;
-import com.zte.sdn.oscp.trains.pay.service.impl.PayService;
+import com.zte.sdn.oscp.trains.pay.service.IPayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class PayController {
 
     @Autowired
-    private PayService payService;
+    private IPayService payService;
 
     @Autowired
     private WxAccountConfig wxAccountConfig;

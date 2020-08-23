@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 
 @Service
 @Slf4j
-public class PayService implements IPayService {
+public class PayServiceImpl implements IPayService {
 
     @Autowired
     private BestPayService bestPayService;
